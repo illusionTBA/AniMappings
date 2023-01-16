@@ -1,0 +1,23 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Anime {
+  id          String @id @unique @default(cuid())
+  anilistId   Int    @unique
+  kitsu       Json   @default("{}")
+  thevdb      Json   @default("{}")
+  anidb       Json   @default("{}")
+  anisearch   Json   @default("{}")
+  notifymoe   Json   @default("{}")
+  animeplanet String @default("")
+  livechart   Json   @default("{}")
+}
