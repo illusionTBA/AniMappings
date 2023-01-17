@@ -1,6 +1,6 @@
 import * as stringsim from 'string-similarity';
 import { prisma } from './db/client';
-import { META } from '@consumet/extensions';
+import { META, ANIME } from '@consumet/extensions';
 import axios from 'axios';
 import { ITitle } from '@consumet/extensions/dist/models';
 import { load } from 'cheerio';
@@ -16,26 +16,39 @@ export const getMappings = async (anilistId: number) => {
   }
   try {
     const anime = await anilist.fetchAnilistInfoById(String(anilistId));
-    console.log(anime);
-    const aniId = Number(anime.id);
     console.log(anime.title);
+    const aniId = Number(anime.id);
+    // console.log(anime.title);
     const liveChartmappings = await getMappingsLiveChart(
       String((anime.title as ITitle).romaji),
+    );
+    const tvdb = await getMappingsTvdb(
+      ((anime.title as ITitle).romaji as string) ??
+        (anime.title as ITitle).english,
+      anime.releaseDate,
     );
     await prisma.anime
       .create({
         data: {
           anilistId: aniId,
-
+          zoroId: await getMappingsZoro(
+            ((anime.title as ITitle).english as string) ??
+              (anime.title as ITitle).romaji,
+          ),
+          gogoanimeId: await getMappingsGogo(
+            ((anime.title as ITitle).romaji as string) ??
+              (anime.title as ITitle).english,
+          ),
+          cronchyId: await getMappignsCrunchyroll(
+            ((anime.title as ITitle).english as string) ??
+              (anime.title as ITitle).romaji,
+          ),
           kitsu: await getMappingsKitsu(
             ((anime.title as ITitle).romaji as string) ??
               (anime.title as ITitle).english,
           ),
-          thevdb: await getMappingsTvdb(
-            ((anime.title as ITitle).romaji as string) ??
-              (anime.title as ITitle).english,
-            anime.releaseDate,
-          ),
+          thevdb: tvdb,
+          tmdb: await getMappingsTmdb(tvdb.id),
           notifymoe: await getMappingsNotifyMoe(
             String((anime.title as ITitle).romaji),
           ),
@@ -102,7 +115,7 @@ const getMappingsTvdb = async (title: string, year?: string) => {
           if (year === undefined) {
             return title;
           }
-          console.log('Checking ' + title + ' with the year ' + year);
+          // console.log('Checking ' + title + ' with the year ' + year);
           if (d.year === String(year)) {
             // console.log('Matched ' + title + ' with the year ' + year);
             return title;
@@ -251,12 +264,89 @@ const getMappingsLiveChart = async (title: string) => {
   };
 };
 
-(async () => {
-  const tvdb = await getMappingsLiveChart(
-    'Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e',
+const getMappingsTmdb = async (tvdbId: string) => {
+  const { data: tmdb } = await axios.get(
+    `https://api.themoviedb.org/3/find/${tvdbId}?api_key=5201b54eb0968700e693a30576d7d4dc&external_source=tvdb_id`,
   );
-  console.log(tvdb.ext_sources.anime_planet[0]);
-  // console.log(
-  //   stringsim.findBestMatch('One Piece', ['One Piece', String(undefined)]),
-  // );
-})();
+
+  return tmdb;
+};
+
+// Anime mappings for zoro and gogoanime
+
+const getMappingsZoro = async (title: string) => {
+  const zoro = new ANIME.Zoro();
+  // console.log(`Checking zoro for ${title}`);
+  return await zoro
+    .search(title)
+    .then((resp: any) => {
+      const bestMatch = stringsim.findBestMatch(
+        title.toLowerCase(),
+        resp.results.map((item: any) => (item.title as string).toLowerCase()),
+      );
+      // console.log(bestMatch);
+      return resp.results[bestMatch.bestMatchIndex].id;
+    })
+    .catch(() => {
+      console.error(
+        `An error occurred while getting zoro mappings for ${title}`,
+      );
+      return {
+        message: `An error occurred while getting zoro mappings for ${title}`,
+      };
+    });
+};
+
+const getMappingsGogo = async (title: string) => {
+  const gogo = new ANIME.Gogoanime();
+
+  return await gogo
+    .search(title)
+    .then((resp: any) => {
+      const bestMatch = stringsim.findBestMatch(
+        title.toLowerCase(),
+        resp.results.map((item: any) => (item.title as string).toLowerCase()),
+      );
+      console.log(resp.results[bestMatch.bestMatchIndex].id);
+      return resp.results[bestMatch.bestMatchIndex].id;
+    })
+    .catch(() => {
+      console.error(
+        `An error occurred while getting gogoanime mappings for ${title}`,
+      );
+      return {
+        message: `An error occurred while getting gogoanime mappings for ${title}`,
+      };
+    });
+};
+
+const getMappignsCrunchyroll = async (title: string) => {
+  try {
+    const { data: crunchy } = await axios.get(
+      `https://cronchy.consumet.stream/search/${title}`,
+    );
+
+    const bestMatch = stringsim.findBestMatch(
+      title.toLowerCase(),
+      crunchy.results.map((item: any) => (item.title as string).toLowerCase()),
+    );
+    // console.log(bestMatch);
+    // console.log(crunchy.results[bestMatch.bestMatchIndex]);
+    return crunchy.results[bestMatch.bestMatchIndex];
+  } catch (error) {
+    console.error(
+      `An error occurred while getting crunchyroll mappings for ${title}`,
+    );
+    return {
+      message: `An error occurred while getting crunchyroll mappings for ${title}`,
+    };
+  }
+};
+
+// (async () => {
+//   const cronchy = await getMappignsCrunchyroll('One Piece');
+//   console.log(cronchy);
+//   // console.log(
+//   //   stringsim.findBestMatch('One Piece', ['One Piece', String(undefined)]),
+//   // );
+// })();
