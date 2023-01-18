@@ -108,7 +108,7 @@ const getMappingsTvdb = async (title: string, year?: string) => {
   // console.log(tvdbData.results[tvdbData.results.length - 1].hits[0]);
   try {
     const bestMatch = stringsim.findBestMatch(
-      title,
+      String(title),
       await tvdbData.results[0].hits.map((d: any) => {
         const title = String(
           d.translations.por ?? d.translations.eng ?? d.name,
@@ -132,8 +132,8 @@ const getMappingsTvdb = async (title: string, year?: string) => {
     );
     return tvdbData.results[0].hits[bestMatch.bestMatchIndex];
   } catch (error) {
-    console.log('error occurred');
-    console.error(error);
+    console.log(`[!] Failed to get TVDB mappings for ${title} `);
+    // console.error(error);
     return {
       message: 'An error occurred while getting tvdb mappings',
     };
