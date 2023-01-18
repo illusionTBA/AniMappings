@@ -25,7 +25,7 @@ export const getMappings = async (anilistId: number) => {
     const tvdb = await getMappingsTvdb(
       ((anime.title as ITitle).romaji as string) ??
         ((anime.title as ITitle).english as string),
-      anime.releaseDate,
+      anime.releaseDate ?? undefined,
     );
     await prisma.anime
       .create({
@@ -83,22 +83,31 @@ export const getMappings = async (anilistId: number) => {
 // getMappings(21);
 
 const getMappingsKitsu = async (title: string) => {
-  const { data: kData } = await axios.get(
-    `https://kitsu.io/api/edge/anime?filter[text]=${title}`,
-  );
-  const bestMatch = stringsim.findBestMatch(
-    title,
-    kData.data.map(
-      (d: any) => d.attributes.titles.en_jp ?? d.attributes.titles.en,
-    ),
-  );
-  // console.log(bestMatch);
-  // console.log(kData.data[bestMatch.bestMatchIndex].id);
-  return kData.data[bestMatch.bestMatchIndex];
+  try {
+    console.log(`[+] Getting Kitsu mappings for ${title}`);
+    const { data: kData } = await axios.get(
+      `https://kitsu.io/api/edge/anime?filter[text]=${title}`,
+    );
+    const bestMatch = stringsim.findBestMatch(
+      String(title),
+      kData.data.map(
+        (d: any) => d.attributes.titles.en_jp ?? d.attributes.titles.en ?? '',
+      ),
+    );
+    // console.log(bestMatch);
+    // console.log(kData.data[bestMatch.bestMatchIndex].id);
+    return kData.data[bestMatch.bestMatchIndex];
+  } catch (error) {
+    // console.error(error);
+    console.log(`[-] Failed to get mappings for ${title} on Kitsu`);
+    return {
+      message: 'An error occurred while getting kitsu mappings',
+    };
+  }
 };
 
 const getMappingsTvdb = async (title: string, year?: string) => {
-  console.log('starting');
+  console.log(`[+] Getting TVDB mappings for ${title} ${year}`);
   const { data: tvdbData } = await axios.post(
     'https://tvshowtime-1.algolianet.com/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%20(lite)%203.32.0%3Binstantsearch.js%20(3.5.3)%3BJS%20Helper%20(2.28.0)&x-algolia-application-id=tvshowtime&x-algolia-api-key=c9d5ec1316cec12f093754c69dd879d3',
     {
