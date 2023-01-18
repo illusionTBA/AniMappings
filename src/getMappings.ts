@@ -24,7 +24,7 @@ export const getMappings = async (anilistId: number) => {
     );
     const tvdb = await getMappingsTvdb(
       ((anime.title as ITitle).romaji as string) ??
-        (anime.title as ITitle).english,
+        ((anime.title as ITitle).english as string),
       anime.releaseDate,
     );
     await prisma.anime
@@ -63,7 +63,7 @@ export const getMappings = async (anilistId: number) => {
         },
       })
       .then(async () => {
-        console.log('created');
+        console.log(`[+] Mappings for ${anime.title} have been added`);
         return await prisma.anime.findFirst({ where: { anilistId: aniId } });
       });
   } catch (error) {
