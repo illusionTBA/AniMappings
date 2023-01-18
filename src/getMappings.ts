@@ -52,10 +52,16 @@ export const getMappings = async (anilistId: number) => {
           // notifymoe: await getMappingsNotifyMoe(
           //   String((anime.title as ITitle).romaji),
           // ),
-          anidb: liveChartmappings.ext_sources.anidb[0].id,
-          anisearch: liveChartmappings.ext_sources.anisearch[0].id,
+          anidb:
+            liveChartmappings.ext_sources.anidb[0].id ??
+            'Failed to get mappings for AniDB',
+          anisearch:
+            liveChartmappings.ext_sources.anisearch[0].id ??
+            'Failed to get mappings for AniSearch',
 
-          livechart: liveChartmappings.livechart,
+          livechart:
+            liveChartmappings.livechart ??
+            'Failed to get mappings for LiveChart',
           animeplanet: String(
             (liveChartmappings.ext_sources as any).anime_planet[0].id ??
               'Failed to get mappings for anime planet',
