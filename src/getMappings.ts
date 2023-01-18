@@ -84,7 +84,10 @@ export const getMappings = async (anilistId: number) => {
 
 const getMappingsKitsu = async (title: string) => {
   const { data: kData } = await axios.get(
-    `https://kitsu.io/api/edge/anime?filter[text]=${title}`,
+    `https://kitsu.io/api/edge/anime?filter[text]=${title.replaceAll(
+      /[^a-z0-9-]/gi,
+      '',
+    )}`,
   );
   const bestMatch = stringsim.findBestMatch(
     title,
@@ -105,7 +108,10 @@ const getMappingsTvdb = async (title: string, year?: string) => {
       requests: [
         {
           indexName: 'TVDB',
-          params: `query=${title}&hitsPerPage=400&page=0`,
+          params: `query=${title.replaceAll(
+            /[^a-z0-9-]/gi,
+            '',
+          )}&hitsPerPage=400&page=0`,
         },
       ],
     },
@@ -183,7 +189,7 @@ const getMappingsLiveChart = async (title: string) => {
   const res: any[] = [];
 
   const { data: liveChart } = await axios.get(
-    `https://www.livechart.me/search?q=${title}`,
+    `https://www.livechart.me/search?q=${title.replaceAll(/[^a-z0-9-]/gi, '')}`,
   );
 
   const $ = load(liveChart);
@@ -285,7 +291,7 @@ const getMappingsZoro = async (title: string) => {
   const zoro = new ANIME.Zoro();
   // console.log(`Checking zoro for ${title}`);
   return await zoro
-    .search(title)
+    .search(title.replaceAll(/[^a-z0-9-]/gi, ''))
     .then((resp: any) => {
       const bestMatch = stringsim.findBestMatch(
         title.toLowerCase(),
@@ -308,7 +314,7 @@ const getMappingsGogo = async (title: string) => {
   const gogo = new ANIME.Gogoanime();
 
   return await gogo
-    .search(title)
+    .search(title.replaceAll(/[^a-z0-9-]/gi, ''))
     .then((resp: any) => {
       const bestMatch = stringsim.findBestMatch(
         title.toLowerCase(),
@@ -330,7 +336,10 @@ const getMappingsGogo = async (title: string) => {
 const getMappignsCrunchyroll = async (title: string) => {
   try {
     const { data: crunchy } = await axios.get(
-      `https://cronchy.consumet.stream/search/${title}`,
+      `https://cronchy.consumet.stream/search/${title.replaceAll(
+        /[^a-z0-9-]/gi,
+        '',
+      )}`,
     );
 
     const bestMatch = stringsim.findBestMatch(
