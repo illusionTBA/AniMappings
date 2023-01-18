@@ -51,6 +51,7 @@ import fastifyCors from '@fastify/cors';
       res.send({
         Total: total,
         AniList: all.filter((a) => a.anilistId).length ?? 0,
+	TheTVDB: all.filter((a) => a.thevdb).length ?? 0,
         Kitsu: all.filter((a) => a.kitsu).length ?? 0,
         Cronchy: all.filter((a) => a.cronchyId).length ?? 0,
         Zoro: all.filter((a) => a.zoroId).length ?? 0,
