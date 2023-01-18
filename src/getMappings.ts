@@ -16,7 +16,7 @@ export const getMappings = async (anilistId: number) => {
   }
   try {
     const anime = await anilist.fetchAnilistInfoById(String(anilistId));
-    console.log(anime.title);
+    // console.log(anime.title);
     const aniId = Number(anime.id);
     // console.log(anime.title);
     const liveChartmappings = await getMappingsLiveChart(
