@@ -57,7 +57,6 @@ import fastifyCors from '@fastify/cors';
         GogoAnime: all.filter((a) => a.gogoanimeId).length ?? 0,
         AniDB: all.filter((a) => a.anidb).length ?? 0,
         LiveChart: all.filter((a) => a.livechart).length ?? 0,
-        all: all ?? 0,
       });
     } catch (error) {
       console.error(error);
