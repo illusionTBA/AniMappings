@@ -63,7 +63,12 @@ export const getMappings = async (anilistId: number) => {
         },
       })
       .then(async () => {
-        console.log(`[+] Mappings for ${anime.title} have been added`);
+        console.log(
+          `[+] Mappings for ${
+            ((anime.title as ITitle).romaji as string) ??
+            (anime.title as ITitle).english
+          } have been added`,
+        );
         return await prisma.anime.findFirst({ where: { anilistId: aniId } });
       });
   } catch (error) {
