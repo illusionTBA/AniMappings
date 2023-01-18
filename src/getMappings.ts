@@ -49,15 +49,17 @@ export const getMappings = async (anilistId: number) => {
           ),
           thevdb: tvdb,
           tmdb: await getMappingsTmdb(tvdb.id),
-          notifymoe: await getMappingsNotifyMoe(
-            String((anime.title as ITitle).romaji),
-          ),
+          // notifymoe: await getMappingsNotifyMoe(
+          //   String((anime.title as ITitle).romaji),
+          // ),
           anidb: liveChartmappings.ext_sources.anidb[0].id,
           anisearch: liveChartmappings.ext_sources.anisearch[0].id,
 
           livechart: liveChartmappings.livechart,
-          animeplanet:
-            (liveChartmappings.ext_sources as any).anime_planet[0].id ?? null,
+          animeplanet: String(
+            (liveChartmappings.ext_sources as any).anime_planet[0].id ??
+              'Failed to get mappings for anime planet',
+          ),
         },
       })
       .then(async () => {
@@ -139,38 +141,38 @@ const getMappingsTvdb = async (title: string, year?: string) => {
 
   // console.log(bestMatch);
 };
-const getMappingsNotifyMoe = async (title: string) => {
-  const res: any[] = [];
-  try {
-    const { data: notifyData } = await axios.get(
-      `https://notify.moe/search/${title}`,
-    );
+// const getMappingsNotifyMoe = async (title: string) => {
+//   const res: any[] = [];
+//   try {
+//     const { data: notifyData } = await axios.get(
+//       `https://notify.moe/search/${title}`,
+//     );
 
-    const $ = load(notifyData);
+//     const $ = load(notifyData);
 
-    $('.anime-search > a').each((i, e) => {
-      res.push({
-        title: $(e).attr('aria-label'),
-        id: $(e).attr('href')?.split('/')[2],
-      });
-    });
+//     $('.anime-search > a').each((i, e) => {
+//       res.push({
+//         title: $(e).attr('aria-label'),
+//         id: $(e).attr('href')?.split('/')[2],
+//       });
+//     });
 
-    const bestMatch = stringsim.findBestMatch(
-      title,
-      res.map((d) => d.title),
-    );
+//     const bestMatch = stringsim.findBestMatch(
+//       title,
+//       res.map((d) => d.title),
+//     );
 
-    const { data: NotifyApi } = await axios.get(
-      `https://notify.moe/api/anime/${res[bestMatch.bestMatchIndex].id}`,
-    );
-    return NotifyApi;
-  } catch (error) {
-    console.error(error);
-    return {
-      message: 'An error occurred while getting notify.moe mappings',
-    };
-  }
-};
+//     const { data: NotifyApi } = await axios.get(
+//       `https://notify.moe/api/anime/${res[bestMatch.bestMatchIndex].id}`,
+//     );
+//     return NotifyApi;
+//   } catch (error) {
+//     console.error(error);
+//     return {
+//       message: 'An error occurred while getting notify.moe mappings',
+//     };
+//   }
+// };
 
 const getMappingsLiveChart = async (title: string) => {
   const res: any[] = [];
