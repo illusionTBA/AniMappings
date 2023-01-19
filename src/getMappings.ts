@@ -31,7 +31,7 @@ export const getMappings = async (anilistId: number) => {
     const liveChartmappings = await livechart(
       String((anime.title as ITitle).romaji),
     );
-    console.log(liveChartmappings.ext_sources);
+    // console.log(liveChartmappings.ext_sources);
     const tvdb = await thetvdb(
       ((anime.title as ITitle).romaji as string) ??
         ((anime.title as ITitle).english as string),
