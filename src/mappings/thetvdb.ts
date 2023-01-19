@@ -4,19 +4,20 @@ import stringsim from 'string-similarity';
 
 const thetvdb = async (title: string, year?: string) => {
   console.log(`[+] Getting TVDB mappings for ${title} ${year}`);
-  const { data: tvdbData } = await axios.post(
-    'https://tvshowtime-1.algolianet.com/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%20(lite)%203.32.0%3Binstantsearch.js%20(3.5.3)%3BJS%20Helper%20(2.28.0)&x-algolia-application-id=tvshowtime&x-algolia-api-key=c9d5ec1316cec12f093754c69dd879d3',
-    {
-      requests: [
-        {
-          indexName: 'TVDB',
-          params: `query=${title}&hitsPerPage=400&page=0`,
-        },
-      ],
-    },
-  );
+
   // console.log(tvdbData.results[tvdbData.results.length - 1].hits[0]);
   try {
+    const { data: tvdbData } = await axios.post(
+      'https://tvshowtime-1.algolianet.com/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%20(lite)%203.32.0%3Binstantsearch.js%20(3.5.3)%3BJS%20Helper%20(2.28.0)&x-algolia-application-id=tvshowtime&x-algolia-api-key=c9d5ec1316cec12f093754c69dd879d3',
+      {
+        requests: [
+          {
+            indexName: 'TVDB',
+            params: `query=${title}&hitsPerPage=400&page=0`,
+          },
+        ],
+      },
+    );
     const bestMatch = stringsim.findBestMatch(
       String(title),
       await tvdbData.results[0].hits.map((d: any) => {
