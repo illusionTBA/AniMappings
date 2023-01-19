@@ -62,20 +62,23 @@ export const getMappings = async (anilistId: number) => {
           // notifymoe: await getMappingsNotifyMoe(
           //   String((anime.title as ITitle).romaji),
           // ),
-          anidb: liveChartmappings.ext_sources.anidb[0]
-            ? liveChartmappings.ext_sources.anidb[0].id ??
-              'Failed to get mappings for AniDB'
-            : 'Failed to get mappings for AniDB',
-          anisearch: liveChartmappings.ext_sources.anisearch
-            ? liveChartmappings.ext_sources.anisearch[0].id
-            : 'Failed to get mappings for AniSearch',
+          anidb:
+            liveChartmappings.ext_sources.anidb.length > 0
+              ? liveChartmappings.ext_sources.anidb[0].id ??
+                'Failed to get mappings for AniDB'
+              : 'Failed to get mappings for AniDB',
+          anisearch:
+            liveChartmappings.ext_sources.anisearch.length > 0
+              ? liveChartmappings.ext_sources.anisearch[0].id
+              : 'Failed to get mappings for AniSearch',
 
           livechart:
             liveChartmappings.livechart ??
             'Failed to get mappings for LiveChart',
-          animeplanet: liveChartmappings.ext_sources.anime_planet
-            ? liveChartmappings.ext_sources.anime_planet[0].id
-            : 'Failed to get mappings for anime planet',
+          animeplanet:
+            liveChartmappings.ext_sources.anime_planet.length > 0
+              ? liveChartmappings.ext_sources.anime_planet[0].id
+              : 'Failed to get mappings for anime planet',
         },
       })
       .then(async () => {
@@ -87,8 +90,15 @@ export const getMappings = async (anilistId: number) => {
         );
         return await prisma.anime.findFirst({ where: { anilistId: aniId } });
       });
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.error(error.message);
+    if (error.message === 'Media not found') {
+      return {
+        message:
+          'An error occurred while processing your request. Please make sure this is a valid AniList ID',
+        error: error.message,
+      };
+    }
     return {
       message:
         'An error occurred while processing your request. Please make sure this is a valid AniList ID',
