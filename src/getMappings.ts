@@ -31,6 +31,7 @@ export const getMappings = async (anilistId: number) => {
     const liveChartmappings = await livechart(
       String((anime.title as ITitle).romaji),
     );
+    console.log(liveChartmappings.ext_sources);
     const tvdb = await thetvdb(
       ((anime.title as ITitle).romaji as string) ??
         ((anime.title as ITitle).english as string),
@@ -61,20 +62,20 @@ export const getMappings = async (anilistId: number) => {
           // notifymoe: await getMappingsNotifyMoe(
           //   String((anime.title as ITitle).romaji),
           // ),
-          anidb:
-            liveChartmappings.ext_sources.anidb[0].id ??
-            'Failed to get mappings for AniDB',
-          anisearch:
-            liveChartmappings.ext_sources.anisearch[0].id ??
-            'Failed to get mappings for AniSearch',
+          anidb: liveChartmappings.ext_sources.anidb[0]
+            ? liveChartmappings.ext_sources.anidb[0].id ??
+              'Failed to get mappings for AniDB'
+            : 'Failed to get mappings for AniDB',
+          anisearch: liveChartmappings.ext_sources.anisearch
+            ? liveChartmappings.ext_sources.anisearch[0].id
+            : 'Failed to get mappings for AniSearch',
 
           livechart:
             liveChartmappings.livechart ??
             'Failed to get mappings for LiveChart',
-          animeplanet: String(
-            (liveChartmappings.ext_sources as any).anime_planet[0].id ??
-              'Failed to get mappings for anime planet',
-          ),
+          animeplanet: liveChartmappings.ext_sources.anime_planet
+            ? liveChartmappings.ext_sources.anime_planet[0].id
+            : 'Failed to get mappings for anime planet',
         },
       })
       .then(async () => {
