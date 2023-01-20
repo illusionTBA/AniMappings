@@ -14,7 +14,8 @@ import { META } from '@consumet/extensions'
       routes: {
         '/': 'This page',
         '/:anilistId': 'Get the Mappings for the given AniList ID',
-	'/trending': 'an example integration with a popular anime library consumet - https://github.com/consumet/consumet.ts'
+	'/trending': 'an example integration with a popular anime library consumet - https://github.com/consumet/consumet.ts', 
+	'/popular': 'another example integration with consumet'
       },
     };
   });
@@ -44,6 +45,25 @@ import { META } from '@consumet/extensions'
       });
     }
   });
+   app.get('/popular', async (req, res) => {
+	try {
+	const resp: any[] = []
+	const anilist = new META.Anilist();
+	const popular = await anilist.fetchPopularAnime()
+	await Promise.all(popular.results.map(async(anime: any, i: number) => {
+		const mappings = await getMappings(anime.id as number)
+		resp.push({
+		 	...anime,
+			mappings: mappings
+		})
+	}))
+	res.send(resp)
+	} catch (err) {
+		console.log(err)
+		res.send("error")
+
+	}
+  }) 
   app.get('/trending', async (req, res) => {
 	try {
 	const resp: any[] = []
@@ -63,6 +83,7 @@ import { META } from '@consumet/extensions'
 
 	}
   }) 
+
   app.get('/stats', async (req, res) => {
     try {
       const all = await prisma.anime.findMany();
