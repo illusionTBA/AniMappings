@@ -2,7 +2,7 @@ import { prisma } from './db/client';
 import { getMappings } from './getMappings';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
-
+import { META } from '@consumet/extensions'
 (async () => {
   const app = fastify({ logger: true });
 
@@ -43,7 +43,25 @@ import fastifyCors from '@fastify/cors';
       });
     }
   });
+  app.get('/trending', async (req, res) => {
+	try {
+	const resp: any[] = []
+	const anilist = new META.Anilist();
+	const trending = await anilist.fetchTrendingAnime()
+	await Promise.all(trending.results.map(async(anime: any, i: number) => {
+		const mappings = await getMappings(anime.id as number)
+		resp.push({
+		 	...anime,
+			mappings: mappings
+		})
+	}))
+	res.send(resp)
+	} catch (err) {
+		console.log(err)
+		res.send("error")
 
+	}
+  }) 
   app.get('/stats', async (req, res) => {
     try {
       const all = await prisma.anime.findMany();
