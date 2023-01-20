@@ -86,10 +86,9 @@ import { META } from '@consumet/extensions'
 
   app.get('/stats', async (req, res) => {
     try {
-      const all = await prisma.anime.findMany();
       const total = all.length;
       res.send({
-        Total: total,
+        Total: await prisma.anime.count(),
         // AniList: all.filter((a) => a.anilistId).length ?? 0,
         // TheTVDB: all.filter((a) => a.thevdb).length ?? 0,
         // Kitsu: all.filter((a) => a.kitsu).length ?? 0,
