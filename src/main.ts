@@ -86,7 +86,6 @@ import { META } from '@consumet/extensions'
 
   app.get('/stats', async (req, res) => {
     try {
-      const total = all.length;
       res.send({
         Total: await prisma.anime.count(),
         // AniList: all.filter((a) => a.anilistId).length ?? 0,
