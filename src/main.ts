@@ -14,6 +14,7 @@ import { META } from '@consumet/extensions'
       routes: {
         '/': 'This page',
         '/:anilistId': 'Get the Mappings for the given AniList ID',
+	'/trending': 'an example integration with a popular anime library consumet - https://github.com/consumet/consumet.ts'
       },
     };
   });
