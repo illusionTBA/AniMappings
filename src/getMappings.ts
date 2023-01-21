@@ -26,12 +26,11 @@ export const getMappings = async (anilistId: number) => {
     });
   }
   try {
-    const anime = await anilist.fetchAnilistInfoById(String(anilistId));
+    const anime = await anilist.fetchAnimeInfo(String(anilistId));
     const aniId = Number(anime.id);
     const liveChartmappings = await livechart(
       String((anime.title as ITitle).romaji),
     );
-    // console.log(liveChartmappings.ext_sources);
     const tvdb = await thetvdb(
       ((anime.title as ITitle).romaji as string) ??
         ((anime.title as ITitle).english as string),
@@ -99,6 +98,7 @@ export const getMappings = async (anilistId: number) => {
         error: error.message,
       };
     }
+    console.log(error);
     return {
       message:
         'An error occurred while processing your request. Please make sure this is a valid AniList ID',
