@@ -19,11 +19,11 @@ const thetvdb = async (title: string, year?: string) => {
       },
     );
     const bestMatch = stringsim.findBestMatch(
-      String(title),
+      String(title).toLowerCase().trim(),
       await tvdbData.results[0].hits.map((d: any) => {
         const title = String(
           d.translations.por ?? d.translations.eng ?? d.name,
-        );
+        ).toLowerCase();
         if (d.type === 'movies' || d.type === 'series') {
           if (year === undefined) {
             return title;
@@ -41,6 +41,7 @@ const thetvdb = async (title: string, year?: string) => {
         }
       }),
     );
+    // console.log(bestMatch);
     return tvdbData.results[0].hits[bestMatch.bestMatchIndex];
   } catch (error) {
     console.log(`[!] Failed to get TVDB mappings for ${title} `);
@@ -52,3 +53,8 @@ const thetvdb = async (title: string, year?: string) => {
 };
 
 export default thetvdb;
+
+// (async () => {
+//   const tvdb = await thetvdb('JUJUTSU KAISEN', '2020');
+//   // console.log(tvdb);
+// })();
