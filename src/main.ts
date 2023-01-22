@@ -59,7 +59,7 @@ import { META } from '@consumet/extensions';
         },
         select: {
           // if the only param is provided, only select that mapping
-          ...(only && { id: true, [only]: true }),
+          ...(only && { id: true, anilistId: true, [only]: true }),
           // if the only param is not provided, select all mappings
           ...(only
             ? {}
