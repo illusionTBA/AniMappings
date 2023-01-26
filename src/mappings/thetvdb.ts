@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { load } from 'cheerio';
 
 import stringsim from 'string-similarity';
 
@@ -41,8 +42,26 @@ const thetvdb = async (title: string, year?: string) => {
         }
       }),
     );
-    // console.log(bestMatch);
-    return tvdbData.results[0].hits[bestMatch.bestMatchIndex];
+
+    const artworks: string[] = [];
+    const { data: artworkData } = await axios.get(
+      `https://thetvdb.com/dereferrer/series/${
+        tvdbData.results[0].hits[bestMatch.bestMatchIndex].id
+      }`,
+    );
+
+    const $$ = load(artworkData);
+
+    $$(
+      'div.tab-content > div#artwork > div.tab-content > div#artwork-backgrounds > div.simple-grid > div',
+    ).each((_, el) => {
+      artworks.push($$(el).find('a > img').attr('data-src') as string);
+    });
+
+    return {
+      ...tvdbData.results[0].hits[bestMatch.bestMatchIndex],
+      artworks: artworks.slice(0, 40),
+    };
   } catch (error) {
     console.log(`[!] Failed to get TVDB mappings for ${title} `);
     // console.error(error);
