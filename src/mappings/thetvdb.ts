@@ -107,9 +107,7 @@ const thetvdb = async (title: string, year?: string) => {
   } catch (error) {
     console.log(`[!] Failed to get TVDB mappings for ${title} `);
     // console.error(error);
-    return {
-      message: 'An error occurred while getting tvdb mappings',
-    };
+    return null;
   }
 };
 
