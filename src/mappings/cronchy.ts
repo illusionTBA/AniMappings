@@ -18,9 +18,7 @@ const cronchy = async (title: string) => {
     console.error(
       `An error occurred while getting crunchyroll mappings for ${title}`,
     );
-    return {
-      message: `An error occurred while getting crunchyroll mappings for ${title}`,
-    };
+    return null;
   }
 };
 
