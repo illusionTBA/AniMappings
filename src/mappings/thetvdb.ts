@@ -43,7 +43,14 @@ const thetvdb = async (title: string, year?: string) => {
       }),
     );
 
-    const artworks: string[] = [];
+    const artworks = {
+      backgrounds: [] as string[],
+      banners: [] as string[],
+      clearArt: [] as string[],
+      clearLogo: [] as string[],
+      icons: [] as string[],
+      posters: [] as string[],
+    };
     const { data: artworkData } = await axios.get(
       `https://thetvdb.com/dereferrer/series/${
         tvdbData.results[0].hits[bestMatch.bestMatchIndex].id
@@ -52,15 +59,50 @@ const thetvdb = async (title: string, year?: string) => {
 
     const $$ = load(artworkData);
 
+    // backgrounds
     $$(
       'div.tab-content > div#artwork > div.tab-content > div#artwork-backgrounds > div.simple-grid > div',
     ).each((_, el) => {
-      artworks.push($$(el).find('a > img').attr('data-src') as string);
+      artworks.backgrounds.push(
+        $$(el).find('a > img').attr('data-src') as string,
+      );
     });
 
+    // Banners
+    $$(
+      'div.tab-content > div#artwork > div.tab-content > div#artwork-banners > div.simple-grid > div',
+    ).each((_, el) => {
+      artworks.banners.push($$(el).find('a > img').attr('data-src') as string);
+    });
+    // Clear Art
+    $$(
+      'div.tab-content > div#artwork > div.tab-content > div#artwork-clearart > div.simple-grid > div',
+    ).each((_, el) => {
+      artworks.clearArt.push($$(el).find('a > img').attr('data-src') as string);
+    });
+    // Clear Logo
+    $$(
+      'div.tab-content > div#artwork > div.tab-content > div#artwork-clearlogo > div.simple-grid > div',
+    ).each((_, el) => {
+      artworks.clearLogo.push(
+        $$(el).find('a > img').attr('data-src') as string,
+      );
+    });
+    // Icons
+    $$(
+      'div.tab-content > div#artwork > div.tab-content > div#artwork-icons > div.simple-grid > div',
+    ).each((_, el) => {
+      artworks.icons.push($$(el).find('a > img').attr('data-src') as string);
+    });
+    // Posters
+    $$(
+      'div.tab-content > div#artwork > div.tab-content > div#artwork-posters > div.simple-grid > div',
+    ).each((_, el) => {
+      artworks.posters.push($$(el).find('a > img').attr('data-src') as string);
+    });
     return {
       ...tvdbData.results[0].hits[bestMatch.bestMatchIndex],
-      artworks: artworks.slice(0, 40),
+      artworks: artworks,
     };
   } catch (error) {
     console.log(`[!] Failed to get TVDB mappings for ${title} `);
