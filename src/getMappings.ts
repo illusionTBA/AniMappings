@@ -16,7 +16,6 @@ import {
 } from './mappings';
 
 export const getMappings = async (anilistId: number) => {
-  const anilist = new META.Anilist();
   if (
     await prisma.anime.findFirst({ where: { anilistId: Number(anilistId) } })
   ) {
@@ -26,7 +25,10 @@ export const getMappings = async (anilistId: number) => {
     });
   }
   try {
-    const anime = await anilist.fetchAnimeInfo(String(anilistId));
+    const { data } = await axios.post('https://graphql.anilist.co/', {
+      query: `{\n \tMedia(id: ${anilistId}) {\n id\n \t title {\n romaji\n english\n native\n userPreferred\n }\n \t} \n}\n`,
+    });
+    const anime = data.data.Media;
     const aniId = Number(anime.id);
     const liveChartmappings = await livechart(
       String((anime.title as ITitle).romaji),
