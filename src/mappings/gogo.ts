@@ -18,7 +18,7 @@ const gogo = async (title: string) => {
       console.error(
         `An error occurred while getting gogoanime mappings for ${title}`,
       );
-      return null;
+      return undefined;
     });
 };
 
