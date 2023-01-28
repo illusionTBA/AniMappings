@@ -26,7 +26,7 @@ export const getMappings = async (anilistId: number) => {
   }
   try {
     const { data } = await axios.post('https://graphql.anilist.co/', {
-      query: `{\n \tMedia(id: ${anilistId}) {\n id\n \t title {\n romaji\n english\n native\n userPreferred\n }\n \t} \n}\n`,
+      query: `{\n \tMedia(id: ${anilistId}) {\n id\n startDate {\n year\n }\n \t title {\n romaji\n english\n native\n userPreferred\n }\n \t} \n}\n`,
     });
     const anime = data.data.Media;
     const aniId = Number(anime.id);
