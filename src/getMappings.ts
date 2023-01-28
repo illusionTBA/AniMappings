@@ -36,7 +36,7 @@ export const getMappings = async (anilistId: number) => {
     const tvdb = await thetvdb(
       ((anime.title as ITitle).english as string) ??
         ((anime.title as ITitle).romaji as string),
-      anime.releaseDate ?? undefined,
+      anime.startDate.year ?? undefined,
     );
     await prisma.anime
       .create({
