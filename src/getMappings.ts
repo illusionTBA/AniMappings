@@ -57,7 +57,7 @@ export const getMappings = async (anilistId: number) => {
               (anime.title as ITitle).english,
           ),
           thevdb: tvdb,
-          tmdb: await tmdb(tvdb.id),
+          tmdb: tvdb.id ? await tmdb(tvdb.id) : null,
           // notifymoe: await getMappingsNotifyMoe(
           //   String((anime.title as ITitle).romaji),
           // ),
