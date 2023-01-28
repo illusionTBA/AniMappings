@@ -5,7 +5,8 @@ import stringsim from 'string-similarity';
 
 const thetvdb = async (title: string, year?: string) => {
   console.log(`[+] Getting TVDB mappings for ${title} ${year}`);
-
+  // if the title includes the words "season", "cour" or part remove it
+  title = title.replace(/(season|cour|part)/gi, '').trim();
   // console.log(tvdbData.results[tvdbData.results.length - 1].hits[0]);
   try {
     const { data: tvdbData } = await axios.post(
