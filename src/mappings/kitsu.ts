@@ -18,7 +18,7 @@ const kitsu = async (title: string) => {
   } catch (error) {
     // console.error(error);
     console.log(`[-] Failed to get mappings for ${title} on Kitsu`);
-    return null;
+    return undefined;
   }
 };
 
