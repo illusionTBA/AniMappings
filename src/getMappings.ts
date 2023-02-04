@@ -61,7 +61,7 @@ export const getMappings = async (anilistId: number) => {
           anilistId: aniId,
           malId: anime.idMal,
           zoroId:
-            anime.idMal !== undefined && malsync
+            anime.idMal !== undefined && malsync && malsync.Zoro
               ? (Object.values(malsync.Zoro)[0] as any).url.replace(
                   'https://zoro.to/',
                   '',
@@ -71,7 +71,7 @@ export const getMappings = async (anilistId: number) => {
                     (anime.title as ITitle).romaji,
                 ),
           gogoanimeId:
-            anime.idMal !== undefined && malsync
+            anime.idMal !== undefined && malsync && malsync.Gogoanime
               ? (Object.values(malsync.Gogoanime)[0] as any).identifier
               : await gogo(
                   ((anime.title as ITitle).romaji as string) ??
