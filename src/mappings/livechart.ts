@@ -5,6 +5,14 @@ import stringsim from 'string-similarity';
 
 const livechart = async (title: string) => {
   const res: any[] = [];
+  const ext_sources: any = {
+    anilist: [],
+    myanimelist: [],
+    anidb: [],
+    anime_planet: [],
+    anisearch: [],
+    kitsu: [],
+  };
 
   const { data: liveChart } = await axios.get(
     `https://www.livechart.me/search?q=${title}`,
@@ -18,21 +26,17 @@ const livechart = async (title: string) => {
       id: $(e).attr('data-anime-id'),
     });
   });
-
+  if (res.length == 0) {
+    return {
+      livechart: null,
+      ext_sources,
+    };
+  }
   const bestMatch = stringsim.findBestMatch(
     title,
     res.map((d) => d.title),
   );
   // console.log(res);
-
-  const ext_sources: any = {
-    anilist: [],
-    myanimelist: [],
-    anidb: [],
-    anime_planet: [],
-    anisearch: [],
-    kitsu: [],
-  };
 
   const { data: liveChartApi } = await axios.get(
     `https://www.livechart.me/anime/${res[bestMatch.bestMatchIndex].id}`,

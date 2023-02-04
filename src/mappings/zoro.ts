@@ -19,9 +19,7 @@ const zoro = async (title: string) => {
       console.error(
         `An error occurred while getting zoro mappings for ${title}`,
       );
-      return {
-        message: `An error occurred while getting zoro mappings for ${title}`,
-      };
+      return undefined;
     });
 };
 

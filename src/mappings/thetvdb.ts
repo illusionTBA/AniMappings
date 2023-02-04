@@ -2,9 +2,10 @@ import axios from 'axios';
 import { load } from 'cheerio';
 
 import stringsim from 'string-similarity';
+import chalk from 'chalk';
 
 const thetvdb = async (title: string, year?: string) => {
-  console.log(`[+] Getting TVDB mappings for ${title} ${year}`);
+  console.log(chalk.green(`[+] Getting TVDB mappings for ${title} ${year}`));
   // if the title includes the words "season", "cour" or part remove it
   title = title.replace(/(season|cour|part)/gi, '').trim();
   // console.log(tvdbData.results[tvdbData.results.length - 1].hits[0]);

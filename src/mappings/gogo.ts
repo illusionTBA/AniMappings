@@ -1,6 +1,6 @@
 import { ANIME } from '@consumet/extensions';
 import stringsim from 'string-similarity';
-
+import chalk from 'chalk';
 const gogo = async (title: string) => {
   const gogo = new ANIME.Gogoanime();
 
@@ -11,7 +11,7 @@ const gogo = async (title: string) => {
         title.toLowerCase(),
         resp.results.map((item: any) => (item.title as string).toLowerCase()),
       );
-      console.log(resp.results[bestMatch.bestMatchIndex].id);
+
       return resp.results[bestMatch.bestMatchIndex].id;
     })
     .catch(() => {

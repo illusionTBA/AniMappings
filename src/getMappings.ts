@@ -89,21 +89,18 @@ export const getMappings = async (anilistId: number) => {
           tmdb: tvdb ? await tmdb(tvdb.id) : undefined,
           anidb:
             liveChartmappings.ext_sources.anidb.length > 0
-              ? liveChartmappings.ext_sources.anidb[0].id ??
-                'Failed to get mappings for AniDB'
-              : 'Failed to get mappings for AniDB',
+              ? liveChartmappings.ext_sources.anidb[0].id ?? undefined
+              : undefined,
           anisearch:
             liveChartmappings.ext_sources.anisearch.length > 0
               ? liveChartmappings.ext_sources.anisearch[0].id
-              : 'Failed to get mappings for AniSearch',
+              : undefined,
 
-          livechart:
-            liveChartmappings.livechart ??
-            'Failed to get mappings for LiveChart',
+          livechart: liveChartmappings.livechart ?? undefined,
           animeplanet:
             liveChartmappings.ext_sources.anime_planet.length > 0
               ? liveChartmappings.ext_sources.anime_planet[0].id
-              : 'Failed to get mappings for anime planet',
+              : undefined,
         },
       })
       .then(async () => {
