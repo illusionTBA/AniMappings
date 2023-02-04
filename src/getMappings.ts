@@ -61,7 +61,7 @@ export const getMappings = async (anilistId: number) => {
           anilistId: aniId,
           malId: anime.idMal,
           zoroId:
-            anime.idMal !== undefined
+            anime.idMal !== undefined && malsync
               ? (Object.values(malsync.Zoro)[0] as any).url.replace(
                   'https://zoro.to/',
                   '',
@@ -71,7 +71,7 @@ export const getMappings = async (anilistId: number) => {
                     (anime.title as ITitle).romaji,
                 ),
           gogoanimeId:
-            anime.idMal !== undefined
+            anime.idMal !== undefined && malsync
               ? (Object.values(malsync.Gogoanime)[0] as any).identifier
               : await gogo(
                   ((anime.title as ITitle).romaji as string) ??
@@ -86,7 +86,7 @@ export const getMappings = async (anilistId: number) => {
               (anime.title as ITitle).english,
           ),
           thetvdb: tvdb,
-          tmdb: tvdb ? await tmdb(tvdb.id) : null,
+          tmdb: tvdb ? await tmdb(tvdb.id) : undefined,
           anidb:
             liveChartmappings.ext_sources.anidb.length > 0
               ? liveChartmappings.ext_sources.anidb[0].id ??
