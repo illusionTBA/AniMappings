@@ -13,6 +13,7 @@ import {
   cronchy,
   tmdb,
   livechart,
+  Malsync,
 } from './mappings';
 
 export const getMappings = async (anilistId: number) => {
@@ -26,13 +27,29 @@ export const getMappings = async (anilistId: number) => {
   }
   try {
     const { data } = await axios.post('https://graphql.anilist.co/', {
-      query: `{\n \tMedia(id: ${anilistId}) {\n id\n startDate {\n year\n }\n \t title {\n romaji\n english\n native\n userPreferred\n }\n \t} \n}\n`,
+      query: `{
+  Media(id:${anilistId}) {
+    id
+    idMal
+    startDate{
+			year
+    }
+    title {
+      romaji
+      english
+      native
+      userPreferred
+    }
+    
+  }
+}`,
     });
     const anime = data.data.Media;
     const aniId = Number(anime.id);
     const liveChartmappings = await livechart(
       String((anime.title as ITitle).romaji),
     );
+    const malsync = await Malsync(anime.idMal as number);
     const tvdb = await thetvdb(
       ((anime.title as ITitle).english as string) ??
         ((anime.title as ITitle).romaji as string),
@@ -42,14 +59,24 @@ export const getMappings = async (anilistId: number) => {
       .create({
         data: {
           anilistId: aniId,
-          zoroId: await zoro(
-            ((anime.title as ITitle).english as string) ??
-              (anime.title as ITitle).romaji,
-          ),
-          gogoanimeId: await gogo(
-            ((anime.title as ITitle).romaji as string) ??
-              (anime.title as ITitle).english,
-          ),
+          malId: anime.idMal,
+          zoroId:
+            anime.idMal !== undefined
+              ? (Object.values(malsync.Zoro)[0] as any).url.replace(
+                  'https://zoro.to/',
+                  '',
+                )
+              : await zoro(
+                  ((anime.title as ITitle).english as string) ??
+                    (anime.title as ITitle).romaji,
+                ),
+          gogoanimeId:
+            anime.idMal !== undefined
+              ? (Object.values(malsync.Gogoanime)[0] as any).identifier
+              : await gogo(
+                  ((anime.title as ITitle).romaji as string) ??
+                    (anime.title as ITitle).english,
+                ),
           cronchyId: await cronchy(
             ((anime.title as ITitle).english as string) ??
               (anime.title as ITitle).romaji,
@@ -58,11 +85,8 @@ export const getMappings = async (anilistId: number) => {
             ((anime.title as ITitle).romaji as string) ??
               (anime.title as ITitle).english,
           ),
-          thevdb: tvdb,
-          tmdb: tvdb ? await tmdb(tvdb.id) : undefined,
-          // notifymoe: await getMappingsNotifyMoe(
-          //   String((anime.title as ITitle).romaji),
-          // ),
+          thetvdb: tvdb,
+          tmdb: tvdb ? await tmdb(tvdb.id) : null,
           anidb:
             liveChartmappings.ext_sources.anidb.length > 0
               ? liveChartmappings.ext_sources.anidb[0].id ??

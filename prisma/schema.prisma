@@ -11,17 +11,18 @@ datasource db {
 }
 
 model Anime {
-  id          String @id @unique @default(cuid())
-  anilistId   Int    @unique
-  zoroId      Json   @default("{}")
-  gogoanimeId Json   @default("{}")
-  cronchyId   Json   @default("{}")
-  kitsu       Json   @default("{}")
-  thevdb      Json   @default("{}")
-  tmdb        Json   @default("{}")
-  anidb       Json   @default("{}")
-  anisearch   Json   @default("{}")
-  notifymoe   Json   @default("{}")
-  animeplanet String @default("")
-  livechart   Json   @default("{}")
+  id          String  @id @unique @default(cuid())
+  anilistId   Int     @unique
+  malId       Int?    @unique
+  zoroId      Json?
+  gogoanimeId Json?
+  cronchyId   Json?
+  kitsu       Json?
+  thetvdb     Json?
+  tmdb        Json?
+  anidb       Json?
+  anisearch   Json?
+  notifymoe   Json?
+  animeplanet String?
+  livechart   Json?
 }

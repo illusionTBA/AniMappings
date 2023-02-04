@@ -46,7 +46,6 @@ import { META } from '@consumet/extensions';
         .status(400)
         .send({ message: 'Please provide a valid only param' });
     // console.log(only);
-    if (only === 'thetvdb') only = 'thevdb';
     if (isNaN(id)) {
       return res.status(400).send({
         message: 'Please provide a valid AniList ID',
@@ -69,7 +68,7 @@ import { META } from '@consumet/extensions';
                 gogoanimeId: true,
                 zoroId: true,
                 kitsu: true,
-                thevdb: true,
+                thetvdb: true,
                 anidb: true,
                 livechart: true,
                 cronchyId: true,
