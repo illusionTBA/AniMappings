@@ -126,14 +126,10 @@ export const getMappings = async (anilistId: number) => {
   }
 };
 
-/*
-(async() => {
-	await prisma.anime.delete({
-		where: {
-			anilistId: 21
-		}
-	})
-	await getMappings(21)
-	console.log(await getMappings(21))
 
-})() */
+//(async() => {
+//	await prisma.anime.deleteMany()
+//	await getMappings(21)
+//	console.log(await getMappings(21))
+
+//})() 

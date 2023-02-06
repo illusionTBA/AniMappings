@@ -93,6 +93,10 @@ const livechart = async (title: string) => {
     },
   );
 */
+
+  //avoid ratelimit
+//  await new Promise(r => setTimeout(r, 100));
+
   return {
     livechart: res[bestMatch.bestMatchIndex].id,
   //  ext_sources,
