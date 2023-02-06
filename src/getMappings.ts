@@ -14,7 +14,11 @@ import {
   tmdb,
   livechart,
   Malsync,
+  fribbList
 } from './mappings';
+
+
+
 
 export const getMappings = async (anilistId: number) => {
   if (
@@ -46,9 +50,10 @@ export const getMappings = async (anilistId: number) => {
     });
     const anime = data.data.Media;
     const aniId = Number(anime.id);
-    const liveChartmappings = await livechart(
-      String((anime.title as ITitle).romaji),
-    );
+    //const liveChartmappings = await livechart(
+    //  String((anime.title as ITitle).romaji),
+    //);
+    const fribb = await fribbList(anime.idMal as number)
     const malsync = await Malsync(anime.idMal as number);
     const tvdb = await thetvdb(
       ((anime.title as ITitle).english as string) ??
@@ -87,20 +92,12 @@ export const getMappings = async (anilistId: number) => {
           ),
           thetvdb: tvdb,
           tmdb: tvdb ? await tmdb(tvdb.id) : undefined,
-          anidb:
-            liveChartmappings.ext_sources.anidb.length > 0
-              ? liveChartmappings.ext_sources.anidb[0].id ?? undefined
-              : undefined,
-          anisearch:
-            liveChartmappings.ext_sources.anisearch.length > 0
-              ? liveChartmappings.ext_sources.anisearch[0].id
-              : undefined,
-
-          livechart: liveChartmappings.livechart ?? undefined,
-          animeplanet:
-            liveChartmappings.ext_sources.anime_planet.length > 0
-              ? liveChartmappings.ext_sources.anime_planet[0].id
-              : undefined,
+          anidb: fribb.anidb_id ?? undefined,
+          anisearch:fribb.anisearch_id ?? undefined,
+          livechart: fribb.livechart_id ?? await livechart(
+      String((anime.title as ITitle).romaji),
+        ),
+          animeplanet:fribb["anime-planet_id"] ?? undefined,
         },
       })
       .then(async () => {
@@ -128,3 +125,15 @@ export const getMappings = async (anilistId: number) => {
     };
   }
 };
+
+/*
+(async() => {
+	await prisma.anime.delete({
+		where: {
+			anilistId: 21
+		}
+	})
+	await getMappings(21)
+	console.log(await getMappings(21))
+
+})() */

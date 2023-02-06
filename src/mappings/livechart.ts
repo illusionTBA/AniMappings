@@ -29,7 +29,7 @@ const livechart = async (title: string) => {
   if (res.length == 0) {
     return {
       livechart: null,
-      ext_sources,
+    //  ext_sources,
     };
   }
   const bestMatch = stringsim.findBestMatch(
@@ -38,7 +38,7 @@ const livechart = async (title: string) => {
   );
   // console.log(res);
 
-  const { data: liveChartApi } = await axios.get(
+/*  const { data: liveChartApi } = await axios.get(
     `https://www.livechart.me/anime/${res[bestMatch.bestMatchIndex].id}`,
   );
 
@@ -92,10 +92,10 @@ const livechart = async (title: string) => {
       }
     },
   );
-
+*/
   return {
     livechart: res[bestMatch.bestMatchIndex].id,
-    ext_sources,
+  //  ext_sources,
   };
 };
 
