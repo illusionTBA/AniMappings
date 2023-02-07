@@ -92,12 +92,12 @@ export const getMappings = async (anilistId: number) => {
           ),
           thetvdb: tvdb,
           tmdb: tvdb ? await tmdb(tvdb.id) : undefined,
-          anidb: fribb.anidb_id ?? undefined,
-          anisearch:fribb.anisearch_id ?? undefined,
-          livechart: fribb.livechart_id ?? await livechart(
+          anidb: fribb?.anidb_id,
+          anisearch:fribb?.anisearch_id,
+          livechart: fribb?.livechart_id ?? await livechart(
       String((anime.title as ITitle).romaji),
         ),
-          animeplanet:fribb["anime-planet_id"] ?? undefined,
+          animeplanet:undefined ,
         },
       })
       .then(async () => {
