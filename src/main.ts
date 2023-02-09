@@ -126,7 +126,7 @@ import { META } from '@consumet/extensions';
       await Promise.all(
         popular.results.map(async (anime: any, i: number) => {
           const mappings = await getMappings(anime.id as number);
-          resp.push({
+          resp.splice(popular.results.indexOf(anime), 0, {
             ...anime,
             mappings: mappings,
           });
@@ -146,10 +146,14 @@ import { META } from '@consumet/extensions';
       await Promise.all(
         trending.results.map(async (anime: any, i: number) => {
           const mappings = await getMappings(anime.id as number);
-          resp.push({
+          resp.splice(trending.results.indexOf(anime), 0, {
             ...anime,
             mappings: mappings,
           });
+          // resp.push({
+          //   ...anime,
+          //   mappings: mappings,
+          // });
         }),
       );
       res.send(resp);

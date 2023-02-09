@@ -4,8 +4,11 @@ import { load } from 'cheerio';
 import stringsim from 'string-similarity';
 import chalk from 'chalk';
 
-const thetvdb = async (title: string, year?: string) => {
-  console.log(chalk.green(`[+] Getting TVDB mappings for ${title} ${year}`));
+const thetvdb = async (title: string, year?: string, format?: string) => {
+  if (!format) format == 'TV';
+  console.log(
+    chalk.green(`[+] Getting TVDB mappings for ${title} ${year} ${format}`),
+  );
   // if the title includes the words "season", "cour" or part remove it
   title = title.replace(/(season|cour|part)/gi, '').trim();
   // console.log(tvdbData.results[tvdbData.results.length - 1].hits[0]);
@@ -54,7 +57,7 @@ const thetvdb = async (title: string, year?: string) => {
       posters: [] as string[],
     };
     const { data: artworkData } = await axios.get(
-      `https://thetvdb.com/dereferrer/series/${
+      `https://thetvdb.com/dereferrer/${format === 'TV' ? 'series' : 'movie'}/${
         tvdbData.results[0].hits[bestMatch.bestMatchIndex].id
       }`,
     );
@@ -108,7 +111,7 @@ const thetvdb = async (title: string, year?: string) => {
     };
   } catch (error) {
     console.log(`[!] Failed to get TVDB mappings for ${title} `);
-    // console.error(error);
+    console.error(error);
     return undefined;
   }
 };
@@ -116,6 +119,6 @@ const thetvdb = async (title: string, year?: string) => {
 export default thetvdb;
 
 // (async () => {
-//   const tvdb = await thetvdb('JUJUTSU KAISEN', '2020');
-//   // console.log(tvdb);
+//   const tvdb = await thetvdb('A Silent Voice', '2016');
+//   console.log(tvdb);
 // })();

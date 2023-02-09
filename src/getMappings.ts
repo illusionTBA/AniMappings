@@ -33,6 +33,7 @@ export const getMappings = async (anilistId: number) => {
   Media(id:${anilistId}) {
     id
     idMal
+    format
     startDate{
 			year
     }
@@ -105,7 +106,7 @@ export const getMappings = async (anilistId: number) => {
               (anime.title as ITitle).english,
           ),
           thetvdb: tvdb,
-          tmdb: tvdb ? await tmdb(tvdb.id) : undefined,
+          tmdb: tvdb ? await tmdb(tvdb.id, anime.format) : undefined,
           anidb: fribb?.anidb_id,
           anisearch: fribb?.anisearch_id,
           livechart:
