@@ -2,10 +2,12 @@ import axios from 'axios';
 import chalk from 'chalk';
 const Malsync = async (malId: number) => {
   try {
+    console.log(chalk.yellow`[!] Getting Mappings for ${malId} via Malsync`);
+
     const { data } = await axios.get(
       `https://api.malsync.moe/mal/anime/${malId}`,
     );
-    console.log(`[+] Getting Mappings for ${malId}`);
+    console.log(chalk.green`[+] Got Mappings for ${malId} via Malsync`);
     return data.Sites;
   } catch (error) {
     console.log(

@@ -13,7 +13,8 @@ import { META } from '@consumet/extensions';
       message: 'Welcome to the AniMappings API!',
       routes: {
         '/': 'This page',
-        '/:anilistId': 'Get the Mappings for the given AniList ID',
+        '/anilist/:anilistId': 'Get the Mappings for the given AniList ID',
+        '/mal/:malId': 'Get the Mappings for the given Mal ID',
         '/trending':
           'an example integration with a popular anime library consumet - https://github.com/consumet/consumet.ts',
         '/popular': 'another example integration with consumet',
@@ -21,7 +22,7 @@ import { META } from '@consumet/extensions';
     };
   });
 
-  app.get('/:id', async (req, res) => {
+  app.get('/anilist/:id', async (req, res) => {
     const id: number = (req.params as { id: number }).id;
     let only = (req.query as { only: string }).only;
     // if the only param doesnt equel kitsu, anilist, or thetvdb, return an error
@@ -65,25 +66,27 @@ import { META } from '@consumet/extensions';
             : {
                 id: true,
                 anilistId: true,
+                malId: true,
                 gogoanimeId: true,
                 zoroId: true,
-                kitsu: true,
-                thetvdb: true,
                 anidb: true,
                 livechart: true,
-                cronchyId: true,
-                tmdb: true,
                 animeplanet: true,
                 anisearch: true,
-                notifymoe: true,
+                cronchyId: true,
+                kitsu: true,
+                tmdb: true,
+                thetvdb: true,
+
+                notifymoe: false,
               }),
         },
       });
-      if (!mappings) {
-        await getMappings(id);
-        return res.send(await getMappings(id));
-      }
-      res.send(mappings);
+      // if (!mappings) {
+      //   // await getMappings(id);
+      //   return res.send(await getMappings(id));
+      // }
+      res.send(await getMappings(id));
     } catch (error) {
       console.error(error);
       return res.status(500).send({
@@ -91,6 +94,30 @@ import { META } from '@consumet/extensions';
       });
     }
   });
+
+  app.get('/mal/:id', async (req, res) => {
+    const id: number = (req.params as { id: number }).id;
+    if (!id) {
+      res.status(400);
+      return res.send({ message: 'Provide a MAL id' });
+    }
+    try {
+      const data = await prisma.anime.findUnique({
+        where: {
+          malId: Number(id),
+        },
+      });
+
+      return data
+        ? res.send(data)
+        : res.status(404).send({
+            message: 'Sorry, Couldnt find the MAL id in the database',
+          });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   app.get('/popular', async (req, res) => {
     try {
       const resp: any[] = [];

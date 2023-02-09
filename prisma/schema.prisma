@@ -16,6 +16,9 @@ model Anime {
   malId       Int?    @unique
   zoroId      Json?
   gogoanimeId Json?
+  nineanimeId String?
+  Marin       String?
+  animepahe   String?
   cronchyId   Json?
   kitsu       Json?
   thetvdb     Json?
