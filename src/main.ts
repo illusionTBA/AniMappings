@@ -38,9 +38,7 @@ import { META } from '@consumet/extensions';
         'cronchyId',
         'zoroId',
         'tmdb',
-        'animeplanet',
         'anisearch',
-        'notifymoe',
       ].includes(only)
     )
       return res
@@ -71,14 +69,11 @@ import { META } from '@consumet/extensions';
                 zoroId: true,
                 anidb: true,
                 livechart: true,
-                animeplanet: true,
                 anisearch: true,
                 cronchyId: true,
                 kitsu: true,
                 tmdb: true,
                 thetvdb: true,
-
-                notifymoe: false,
               }),
         },
       });
