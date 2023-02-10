@@ -25,6 +25,9 @@ const thetvdb = async (title: string, year?: string, format?: string) => {
         ],
       },
     );
+    if (tvdbData.results[0].hits.length === 0) {
+      return undefined;
+    }
     const bestMatch = stringsim.findBestMatch(
       String(title).toLowerCase().trim(),
       await tvdbData.results[0].hits.map((d: any) => {
@@ -58,9 +61,9 @@ const thetvdb = async (title: string, year?: string, format?: string) => {
       posters: [] as string[],
     };
     const { data: artworkData } = await axios.get(
-      `https://thetvdb.com/dereferrer/${format === 'TV' ? 'series' : 'movie'}/${
-        tvdbData.results[0].hits[bestMatch.bestMatchIndex].id
-      }`,
+      `https://thetvdb.com/dereferrer/${
+        format === 'TV' ? 'series' : format === 'TV_SHORT' ? 'series' : 'movie'
+      }/${tvdbData.results[0].hits[bestMatch.bestMatchIndex].id}`,
     );
 
     const $$ = load(artworkData);
