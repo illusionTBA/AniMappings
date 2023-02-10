@@ -25,7 +25,5 @@ model Anime {
   tmdb        Json?
   anidb       Json?
   anisearch   Json?
-  notifymoe   Json?
-  animeplanet String?
   livechart   Json?
 }

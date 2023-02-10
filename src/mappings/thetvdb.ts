@@ -5,7 +5,8 @@ import stringsim from 'string-similarity';
 import chalk from 'chalk';
 
 const thetvdb = async (title: string, year?: string, format?: string) => {
-  if (!format) format == 'TV';
+  // console.log('format', format);
+  if (format === undefined) format == 'TV';
   console.log(
     chalk.green(`[+] Getting TVDB mappings for ${title} ${year} ${format}`),
   );

@@ -3,7 +3,6 @@ import stringsim from 'string-similarity';
 
 const tmdb = async (tvdbId: any, format?: string) => {
   if (!format) format = 'TV';
-  console.log(format);
   try {
     const { data: tmdb } = await axios.get(
       `https://api.themoviedb.org/3/find/${tvdbId}?api_key=5201b54eb0968700e693a30576d7d4dc&external_source=tvdb_id`,
