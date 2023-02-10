@@ -113,7 +113,6 @@ export const getMappings = async (anilistId: number) => {
           livechart:
             fribb?.livechart_id ??
             (await livechart(String((anime.title as ITitle).romaji))),
-          animeplanet: undefined,
         },
       })
       .then(async () => {
