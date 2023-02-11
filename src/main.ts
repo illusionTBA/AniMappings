@@ -113,6 +113,38 @@ import { META } from '@consumet/extensions';
     }
   });
 
+  app.get('/info/:id', async (req, res) => {
+    const id: number = (req.params as { id: number }).id;
+
+    try {
+      const anilist = new META.Anilist();
+      const info = await anilist.fetchAnimeInfo(String(id));
+      const mappings = await getMappings(id);
+      info.mappings && delete info.mappings;
+      res.status(200).send({
+        ...info,
+        mappings: mappings,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send(
+          'Ran into an error trying to request that info. Please try again later',
+        );
+    }
+  });
+
+  app.get('/search/:query', async (req, res) => {
+    const query: string = (req.params as { query: string }).query;
+
+    try {
+      const result = await prisma.anime.findMany({
+        where: {},
+      });
+    } catch (error) {}
+  });
+
   app.get('/popular', async (req, res) => {
     try {
       const resp: any[] = [];

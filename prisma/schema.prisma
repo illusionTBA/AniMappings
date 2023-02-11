@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -19,6 +20,7 @@ model Anime {
   nineanimeId String?
   Marin       String?
   animepahe   String?
+  anilist     Json?
   cronchyId   Json?
   kitsu       Json?
   thetvdb     Json?
