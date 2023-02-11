@@ -13,7 +13,7 @@ datasource db {
 model Anime {
   id          String  @id @unique @default(cuid())
   anilistId   Int     @unique
-  malId       Int?    
+  malId       Int?    @unique
   zoroId      Json?
   gogoanimeId Json?
   nineanimeId String?
