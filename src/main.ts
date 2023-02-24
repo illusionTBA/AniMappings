@@ -86,7 +86,7 @@ import { META } from '@consumet/extensions';
 
   app.get('/search/:query', async (req, res) => {
     const query: string = (req.params as { query: string }).query;
-    console.log(`searching ${query}`);
+    // console.log(`searching ${query}`);
     try {
       const result = await prisma.anime.findMany({
         where: {
@@ -96,7 +96,7 @@ import { META } from '@consumet/extensions';
           },
         },
       });
-      console.log(result);
+      // console.log(result);
       res.send(result);
     } catch (error) {
       console.log(error);
