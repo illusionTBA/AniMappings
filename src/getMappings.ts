@@ -57,7 +57,7 @@ export const getMappings = async (anilistId: number) => {
       anime.startDate.year ?? undefined,
       anime.format,
     );
-    console.log(anime.title.native);
+    // console.log(anime.title.native);
     await prisma.anime
       .create({
         data: {
@@ -123,7 +123,7 @@ export const getMappings = async (anilistId: number) => {
             (anime.title as ITitle).english
           } have been added`,
         );
-        console.log(data);
+        // console.log(data);
       });
     return await prisma.anime.findUnique({ where: { anilistId: aniId } });
   } catch (error: any) {
