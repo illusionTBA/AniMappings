@@ -13,6 +13,7 @@ datasource db {
 
 model Anime {
   id          String  @id @unique @default(cuid())
+  title       String?
   anilistId   Int     @unique
   malId       Int?    @unique
   zoroId      Json?
@@ -28,4 +29,14 @@ model Anime {
   anidb       Json?
   anisearch   Json?
   livechart   Json?
+  Title       Title[]
+}
+
+model Title {
+  id      String  @id @unique @default(cuid())
+  english String?
+  native  String?
+  romaji  String?
+  Anime   Anime?  @relation(fields: [animeId], references: [id])
+  animeId String?
 }

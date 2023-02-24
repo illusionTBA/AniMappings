@@ -57,10 +57,13 @@ export const getMappings = async (anilistId: number) => {
       anime.startDate.year ?? undefined,
       anime.format,
     );
+    console.log(anime.title.native);
     await prisma.anime
       .create({
         data: {
           anilistId: aniId,
+          title:
+            anime.title.english ?? anime.title.romaji ?? anime.title.native,
           malId: anime.idMal,
           zoroId:
             anime.idMal !== undefined && malsync && malsync.Zoro
@@ -94,6 +97,7 @@ export const getMappings = async (anilistId: number) => {
             anime.idMal !== undefined && malsync && malsync.animepahe
               ? (Object.values(malsync.animepahe)[0] as any).identifier
               : undefined,
+          anilist: anime,
           cronchyId: await cronchy(
             ((anime.title as ITitle).english as string) ??
               (anime.title as ITitle).romaji,
@@ -112,13 +116,14 @@ export const getMappings = async (anilistId: number) => {
             (await livechart(String((anime.title as ITitle).romaji))),
         },
       })
-      .then(async () => {
+      .then(async (data) => {
         console.log(
           chalk.green`[+] Mappings for ${
             ((anime.title as ITitle).romaji as string) ??
             (anime.title as ITitle).english
           } have been added`,
         );
+        console.log(data);
       });
     return await prisma.anime.findUnique({ where: { anilistId: aniId } });
   } catch (error: any) {
