@@ -109,6 +109,7 @@ const thetvdb = async (title: string, year?: string, format?: string) => {
     ).each((_, el) => {
       artworks.posters.push($$(el).find('a > img').attr('data-src') as string);
     });
+
     return {
       ...tvdbData.results[0].hits[bestMatch.bestMatchIndex],
       artworks: artworks,

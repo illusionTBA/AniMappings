@@ -4,7 +4,7 @@ import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import { META } from '@consumet/extensions';
 (async () => {
-  const app = fastify({ logger: true });
+  const app = fastify({ logger: false });
 
   app.register(fastifyCors);
 
@@ -81,25 +81,6 @@ import { META } from '@consumet/extensions';
         .send(
           'Ran into an error trying to request that info. Please try again later',
         );
-    }
-  });
-
-  app.get('/search/:query', async (req, res) => {
-    const query: string = (req.params as { query: string }).query;
-    // console.log(`searching ${query}`);
-    try {
-      const result = await prisma.anime.findMany({
-        where: {
-          title: {
-            search: query,
-            mode: 'insensitive',
-          },
-        },
-      });
-      // console.log(result);
-      res.send(result);
-    } catch (error) {
-      console.log(error);
     }
   });
 

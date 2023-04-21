@@ -1,6 +1,9 @@
 import axios from 'axios';
 import stringsim from 'string-similarity';
 
+/**
+ * @Deprecated Api has shutdown
+ */
 const cronchy = async (title: string) => {
   try {
     const { data: crunchy } = await axios.get(

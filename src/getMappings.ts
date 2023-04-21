@@ -30,22 +30,22 @@ export const getMappings = async (anilistId: number) => {
   try {
     const { data } = await axios.post('https://graphql.anilist.co/', {
       query: `{
-  Media(id:${anilistId}) {
-    id
-    idMal
-    format
-    startDate{
-			year
-    }
-    title {
-      romaji
-      english
-      native
-      userPreferred
-    }
-    
-  }
-}`,
+                Media(id:${anilistId}) {
+                  id
+                  idMal
+                  format
+                  startDate{
+                    year
+                  }
+                  title {
+                    romaji
+                    english
+                    native
+                    userPreferred
+                  }
+                  
+                }
+              }`,
     });
     const anime = data.data.Media;
     const aniId = Number(anime.id);
@@ -62,8 +62,12 @@ export const getMappings = async (anilistId: number) => {
       .create({
         data: {
           anilistId: aniId,
-          title:
-            anime.title.english ?? anime.title.romaji ?? anime.title.native,
+          title: {
+            english: anime.title.english ?? null,
+            romaji: anime.title.romaji ?? null,
+            native: anime.title.native ?? null
+          }
+            ,
           malId: anime.idMal,
           zoroId:
             anime.idMal !== undefined && malsync && malsync.Zoro
@@ -98,11 +102,11 @@ export const getMappings = async (anilistId: number) => {
               ? (Object.values(malsync.animepahe)[0] as any).identifier
               : undefined,
           anilist: anime,
-          cronchyId: await cronchy(
-            ((anime.title as ITitle).english as string) ??
-              (anime.title as ITitle).romaji,
-          ),
-
+          cronchyId: undefined,
+          // await cronchy(
+          //   ((anime.title as ITitle).english as string) ??
+          //     (anime.title as ITitle).romaji,
+          // )
           kitsu: await kitsu(
             ((anime.title as ITitle).romaji as string) ??
               (anime.title as ITitle).english,
@@ -126,20 +130,21 @@ export const getMappings = async (anilistId: number) => {
         // console.log(data);
       });
     return await prisma.anime.findUnique({ where: { anilistId: aniId } });
-  } catch (error: any) {
-    console.error(error.message);
-    if (error.message === 'Media not found') {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === 'Media not found') {
+        return {
+          message:
+            'An error occurred while processing your request. Please make sure this is a valid AniList ID',
+          error: error.message,
+        };
+      }
+      console.log(error);
       return {
         message:
           'An error occurred while processing your request. Please make sure this is a valid AniList ID',
-        error: error.message,
       };
     }
-    console.log(error);
-    return {
-      message:
-        'An error occurred while processing your request. Please make sure this is a valid AniList ID',
-    };
   }
 };
 
