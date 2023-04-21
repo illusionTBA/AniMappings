@@ -49,14 +49,15 @@ export const getMappings = async (anilistId: number) => {
     });
     const anime = data.data.Media;
     const aniId = Number(anime.id);
-    const fribb = await fribbList(anime.idMal as number);
-    const malsync = await Malsync(anime.idMal as number);
-    const tvdb = await thetvdb(
+    const fribb =  await fribbList(anime.idMal as number);
+    const malsync =  await Malsync(anime.idMal as number);
+    const tvdb =  await thetvdb(
       ((anime.title as ITitle).english as string) ??
         ((anime.title as ITitle).romaji as string),
       anime.startDate.year ?? undefined,
       anime.format,
     );
+    await Promise.all([fribb, tvdb])
     // console.log(anime.title.native);
     await prisma.anime
       .create({

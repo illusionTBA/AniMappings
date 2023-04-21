@@ -15,8 +15,11 @@ import { getMappings } from "./getMappings";
             console.time('mappings')
             const mappings = await getMappings(ids[i])
             console.timeEnd('mappings')
-        } catch (error) {
-            console.log(error)
+            console.log(`[?] ${i + 1}/${ids.length}`)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                 console.log(`[!] Failed to get mappings for ${ids[i]} - ${error.message}`)
+            }
         }
     }
 })()

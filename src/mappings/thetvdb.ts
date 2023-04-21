@@ -114,9 +114,13 @@ const thetvdb = async (title: string, year?: string, format?: string) => {
       ...tvdbData.results[0].hits[bestMatch.bestMatchIndex],
       artworks: artworks,
     };
-  } catch (error) {
-    console.log(`[!] Failed to get TVDB mappings for ${title} `);
-    console.error(error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log(`[!] Failed to get TVDB mappings for ${title} - ${error.message}`);
+    } else {
+          console.log(`[!] Failed to get TVDB mappings for ${title}`);
+    }
+    // console.error(error);
     return undefined;
   }
 };

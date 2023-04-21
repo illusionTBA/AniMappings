@@ -139,6 +139,8 @@ import { META } from '@consumet/extensions';
   });
 
   app.listen({
-    port: 3000,
-  });
+    port: Number(process.env.PORT) || 3030,
+  }).then((adress) => {
+    console.log(adress)
+  })
 })();
