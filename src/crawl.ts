@@ -41,7 +41,7 @@ import colors from "colors";
             console.time('mappings')
             const mappings = await getMappings(ids[i])
             console.timeEnd('mappings')
-            console.log(`[?] ${i + 1}/${doIds}`);
+            console.log(`[?] ${i + 1}/${ids.length}`);
             writeFileSync("lastId.txt", i.toString());
 
         } catch (error: unknown) {
