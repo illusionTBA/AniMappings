@@ -3,13 +3,12 @@ import axios from "axios";
 import { getMappings } from "./getMappings";
 import colors from "colors";
 
-let maxIds: number = 0;
+
 
 (async() => {
     const { data } = await axios.get("https://raw.githubusercontent.com/5H4D0WILA/IDFetch/main/ids.txt")
     const ids = data.split('\n')
 
-    maxIds = maxIds ? maxIds : ids.length;
 
     let lastId = 0;    
     
@@ -25,6 +24,9 @@ let maxIds: number = 0;
             console.log(colors.red("Could not read lastId.txt"));
         }
     }
+
+    let maxIds: number = doIds+ lastId;
+    maxIds = maxIds ? maxIds : ids.length;
 
     for (let i = lastId; i < ids.length && i < maxIds; i++) {
         // stop if we reached the max ids or end of the list
