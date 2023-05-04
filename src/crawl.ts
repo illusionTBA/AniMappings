@@ -44,7 +44,7 @@ import colors from "colors";
             console.log(`[?] ${i + 1}/${doIds}`);
             writeFileSync("lastId.txt", i.toString());
 
-         catch (error: unknown) {
+        } catch (error: unknown) {
             if (error instanceof Error) {
                  console.log(`[!] Failed to get mappings for ${ids[i]} - ${error.message}`)
             }
