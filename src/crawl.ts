@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import axios from "axios";
 import { getMappings } from "./getMappings";
+import colors from "colors";
 
 let maxIds: number = 0;
 
