@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/main.ts",
     "start": "ts-node src/main.ts",
-    "crawl": "ts-node src/crawl.ts"
+    "crawl": "ts-node src/scripts/crawl.ts",
+    "export": "ts-node src/scripts/export.ts"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
@@ -22,7 +23,6 @@
     "@types/string-similarity": "^4.0.0",
     "axios": "^1.2.2",
     "chalk": "4.1.2",
-    "colors": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.0.3",
     "fastify": "^4.11.0",

@@ -13,6 +13,7 @@ datasource db {
 
 model Anime {
   id          String  @id @unique @default(cuid())
+  Title       Title[]
   title       Json
   anilistId   Int     @unique
   malId       Int?    @unique
@@ -29,7 +30,6 @@ model Anime {
   anidb       Json?
   anisearch   Json?
   livechart   Json?
-  Title       Title[]
 }
 
 model Title {
