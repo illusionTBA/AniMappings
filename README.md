@@ -18,8 +18,14 @@ A **Postgresql** database needs to already be setup. You can use [Neon.tech](htt
 
 1. Clone the repository: `git clone https://github.com/illusionTBA/AniMappings.git`
 2. Install dependencies: `npm install`
-3. crawl anilist to populate DB: `npm run crawl`
-4. Start the server: `npm start`
+3. Make a .env file with a variable called `DATABASE_URL` and set it to your Postgresql connection URL string.
+
+```
+DATABSE_URL="postgresql://user:password@host/db"
+```
+
+4. crawl anilist to populate DB: `npm run crawl`
+5. Start the server: `npm start`
 
 ## Usage
 
