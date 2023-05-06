@@ -142,6 +142,11 @@ import { Prisma } from "@prisma/client";
   });
 
   let lastId = 0;
+  if (!fs.existsSync("lastId.txt")) {
+    console.log(chalk.yellow("lastId.txt does not exist. Creating..."));
+    fs.writeFileSync("lastId.txt", "0");
+    console.log(chalk.green("Created lastId.txt"));
+  }
   let lastIdString = fs.readFileSync("lastId.txt", "utf8");
   lastId = isNaN(parseInt(lastIdString)) ? 0 : parseInt(lastIdString);
   app

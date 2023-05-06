@@ -1,9 +1,6 @@
-import * as stringsim from "string-similarity";
 import { prisma } from "./db/client";
-import { META, ANIME } from "@consumet/extensions";
 import axios from "axios";
 import { ITitle } from "@consumet/extensions/dist/models";
-import { load } from "cheerio";
 
 import {
   kitsu,
@@ -27,6 +24,7 @@ export const getMappings = async (anilistId: number) => {
       where: { anilistId: Number(anilistId) },
     });
   }
+
   try {
     const { data } = await axios.post("https://graphql.anilist.co/", {
       query: `{
@@ -47,6 +45,8 @@ export const getMappings = async (anilistId: number) => {
                 }
               }`,
     });
+    console.log(data);
+
     const anime = data.data.Media;
     const aniId = Number(anime.id);
     const fribb = await fribbList(anime.idMal as number);
