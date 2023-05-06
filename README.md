@@ -12,7 +12,7 @@ A project to scrape anime meta from lots of websites using anilist id's
 
 ### Prerequisites
 
-A **Postgresql** database needs to already be setup. You can use [Neon.tech](https://neon.tech/) and [Planetscale](https://planetscale.com/) offer amazing free tiers that you can utilize
+A **Postgresql** database needs to already be setup. You can use [Neon.tech](https://neon.tech/) and [Planetscale](https://planetscale.com/). They offer amazing free tiers that you can utilize
 
 ### Installation
 
@@ -30,7 +30,7 @@ DATABSE_URL="postgresql://user:password@host/db"
 ## Usage
 
 - You can export all of the DB into a json file using the `npm run export` command
-- Using the webserver (`npm start`) you can request the `/anilist/id` to recieve the meta for that anime (replacing `id` with the anilist id)
+- Using the webserver (`npm start`) you can request the `/anilist/id` route to recieve the meta for that anime (replacing `id` with the anilist id)
 - Crawling is how the database populates itself. You can use `npm run crawl` to start crawling anilist and other providers. If it crashes it will start off where it left off.
 
 ## Acknowledgements
