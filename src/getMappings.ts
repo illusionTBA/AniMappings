@@ -45,7 +45,6 @@ export const getMappings = async (anilistId: number) => {
                 }
               }`,
     });
-    console.log(data);
 
     const anime = data.data.Media;
     const aniId = Number(anime.id);
