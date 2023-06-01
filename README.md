@@ -12,7 +12,7 @@ A project to scrape anime meta from lots of websites using anilist id's
 
 ### Prerequisites
 
-A **Postgresql** database needs to already be setup. You can use [Neon.tech](https://neon.tech/) and [Planetscale](https://planetscale.com/). They offer amazing free tiers that you can utilize
+A **Postgresql** database needs to already be setup. You can use [Neon.tech](https://neon.tech/), [Planetscale](https://planetscale.com/) and [Railway](https://railway.app?referralCode=G3T2GA). They offer amazing free tiers that you can utilize
 
 ### Installation
 
